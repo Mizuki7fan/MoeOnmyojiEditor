@@ -366,11 +366,11 @@ data_BasicInfo BasicInfoForm::getData()
 void BasicInfoForm::doHide(int k)
 {
 	//用于控制模块的隐藏，接收LeRarity的值为k，当k=1的时候表示式神稀有度是SP，一些项目应当修改
-	if (k == 1)
+	if (k == 1 || k==4)
 	{
 		for (int i = 0; i < 5; i++)
 			A_Rank[i]->setEnabled(false);
-		for (int i = 0; i < 8; i++)
+		for (int i = 5; i < 8; i++)
 			A_Value[i]->setEnabled(false);
 		LeAEffect->setEnabled(false);
 		LeAEffectKind->setEnabled(false);

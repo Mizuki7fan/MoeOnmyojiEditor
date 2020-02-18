@@ -242,6 +242,12 @@ start:
 			Data->skill_info.skill_group[skill_no].Dialogue = value;
 		else if (str.indexOf(QStringLiteral("|技能描述")) != -1)
 		{
+			if (str.indexOf(QStringLiteral("普通技能")))
+				skill_kind = 0;
+			else if (str.indexOf(QStringLiteral("被动技能")))
+				skill_kind = 1;
+			else if (str.indexOf(QStringLiteral("仅有描述的技能")))
+				skill_kind = 2;
 			state.push(3);
 		}
 		else if (str.indexOf(QStringLiteral("|衍生技能")) != -1)
@@ -262,7 +268,7 @@ start:
 	{//
 		if (str.indexOf(QStringLiteral("|lv")) != -1)
 		{
-			if (str.indexOf(QStringLiteral("冷却")) != -1)
+			if (str.indexOf(QStringLiteral("冷却")) != -1)//找到冷却词条
 			{
 				Data->skill_info.skill_group[skill_no].Content[skill_lv_no].Cd = value;
 			}
@@ -277,6 +283,7 @@ start:
 			else
 			{
 				data_SkillDesc tmp;
+				tmp.KindID = skill_kind;
 				Data->skill_info.skill_group[skill_no].Content.push_back(tmp);
 				skill_lv_no++;
 			}
@@ -321,12 +328,19 @@ start:
 				Data->skill_info.skill_group[skill_no].Derive[skill_derive_no].Name = value;
 			else if (str.indexOf(QStringLiteral("说明")) != -1)
 			{//进行衍生技能的说明
+				if (str.indexOf(QStringLiteral("普通技能"))!=-1)
+					derive_skill_kind = 0;
+				else if (str.indexOf(QStringLiteral("被动技能"))!=-1)
+					derive_skill_kind = 1;
+				else if (str.indexOf(QStringLiteral("仅有描述的技能"))!=-1)
+					derive_skill_kind = 2;
 				state.push(6);
 			}
 		}
 		else if (str.indexOf("}}") == 0)
 		{
 			state.pop();
+			skill_derive_no = -1;
 			return;
 		}
 	}
@@ -349,14 +363,13 @@ start:
 			else
 			{
 				data_SkillDesc tmp;
+				tmp.KindID = derive_skill_kind;
 				Data->skill_info.skill_group[skill_no].Derive[skill_derive_no].Content.push_back(tmp);
 				skill_lv_no++;
 			}
-
 		}
 		else if (str.indexOf("}}") == 0)
 		{//表示衍生技能说明结束
-
 			skill_lv_no = -1;
 			state.pop();
 			return;
@@ -371,7 +384,7 @@ start:
 		}
 		else if (str.indexOf("}}") == 0)
 		{
-			skill_derive_no = -1;
+			//skill_derive_no = -1;
 			state.pop();
 			goto start;
 		}
@@ -585,7 +598,7 @@ void Parser::Form2Txt_BasicInfo()
 	BasicInfo_txt.append(QStringLiteral("|相关角色=") + data.Relevant + "\n");
 	BasicInfo_txt.append(QStringLiteral("|式神简介=\n"));
 	QStringList Q = data.Intro.split("\n");
-	for (int i = 0; i < Q.size() - 1; i++)
+	for (int i = 0; i < Q.size() ; i++)
 	{
 		BasicInfo_txt.append(Q.at(i) + "<br>\n");
 	}
@@ -611,22 +624,45 @@ void Parser::Form2Txt_Skill()
 		Skill_txt.append(QStringLiteral("|技能图标=") + data.skill_group[u].Icon + "\n");
 		Skill_txt.append(QStringLiteral("|技能名称=") + data.skill_group[u].Name + "\n");
 		Skill_txt.append(QStringLiteral("|技能台词=") + data.skill_group[u].Dialogue + "\n");
-		Skill_txt.append(QStringLiteral("|技能描述={{阴阳师手游:普通技能") + "\n");
-		for (int i = 0; i < data.skill_group[u].Content.size(); i++)
+		if (data.skill_group[u].Content.size() != 0)
 		{
-			Skill_txt.append("|lv" + QString::number(i + 1) + "=Lv." + QString::number(i + 1) + "\n");
-			Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("冷却=") + data.skill_group[u].Content[i].Cd + "\n");
-			Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("鬼火=") + data.skill_group[u].Content[i].Cost + "\n");
-			Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("描述=") + "\n");
-			QStringList Q = data.skill_group[u].Content[i].Desc.split("\n");//按照|分割字符串
-			for (int m = 0; m < Q.size() - 1; m++)
+			int kind = data.skill_group[u].Content[0].KindID;
+			if (kind == 0)//这是一个主动技能
 			{
-				Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+				Skill_txt.append(QStringLiteral("|技能描述={{阴阳师手游:普通技能") + "\n");
+				for (int i = 0; i < data.skill_group[u].Content.size(); i++)
+				{
+					Skill_txt.append("|lv" + QString::number(i + 1) + "=Lv." + QString::number(i + 1) + "\n");
+					Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("冷却=") + data.skill_group[u].Content[i].Cd + "\n");
+					Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("鬼火=") + data.skill_group[u].Content[i].Cost + "\n");
+					Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("描述=") + "\n");
+					QStringList Q = data.skill_group[u].Content[i].Desc.split("\n");//按照|分割字符串
+					for (int m = 0; m < Q.size(); m++)
+					{
+						Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+					}
+					//去掉行末的空格
+					//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+				}
 			}
-			//去掉行末的空格
-			Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+			else if (kind == 1)//这是一个被动技能
+			{
+				Skill_txt.append(QStringLiteral("|技能描述={{阴阳师手游:被动技能") + "\n");
+				for (int i = 0; i < data.skill_group[u].Content.size(); i++)
+				{
+					Skill_txt.append("|lv" + QString::number(i + 1) + "=Lv." + QString::number(i + 1) + "\n");
+					Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("描述=") + "\n");
+					QStringList Q = data.skill_group[u].Content[i].Desc.split("\n");//按照|分割字符串
+					for (int m = 0; m < Q.size() - 1; m++)
+					{
+						Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+					}
+					//去掉行末的空格
+					Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+				}//技能描述中不存在仅有描述的情况
+			}
+			Skill_txt.append("}}\n");
 		}
-		Skill_txt.append("}}\n");
 		if (data.skill_group[u].Derive.size() != 0)
 		{
 			Skill_txt.append(QStringLiteral("|衍生技能={{阴阳师手游:衍生技能") + "\n");
@@ -634,60 +670,97 @@ void Parser::Form2Txt_Skill()
 			{
 				Skill_txt.append(QStringLiteral("|衍") + QString::number(i + 1) + QStringLiteral("图标=") + data.skill_group[u].Derive[i].Icon + "\n");
 				Skill_txt.append(QStringLiteral("|衍") + QString::number(i + 1) + QStringLiteral("名=") + data.skill_group[u].Derive[i].Name + "\n");
-				Skill_txt.append(QStringLiteral("|衍") + QString::number(i + 1) + QStringLiteral("说明={{阴阳师手游:普通技能\n"));
-				for (int j = 0; j < data.skill_group[u].Derive[i].Content.size(); j++)
+				if (data.skill_group[u].Derive[i].Content.size() != 0)
 				{
-					Skill_txt.append(QStringLiteral("|lv") + QString::number(j + 1) + "=Lv." + QString::number(j + 1) + "\n");
-					Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("冷却=") + data.skill_group[u].Derive[i].Content[j].Cd + "\n");
-					Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("鬼火=") + data.skill_group[u].Derive[i].Content[j].Cost + "\n");
-					Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("描述=") + "\n");
-					QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
-					for (int m = 0; m < Q.size() - 1; m++)
+					int kind = data.skill_group[u].Derive[i].Content[0].KindID;
+					if (kind == 0)
 					{
-						Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+						Skill_txt.append(QStringLiteral("|衍") + QString::number(i + 1) + QStringLiteral("说明={{阴阳师手游:普通技能\n"));
+						for (int j = 0; j < data.skill_group[u].Derive[i].Content.size(); j++)
+						{
+							Skill_txt.append(QStringLiteral("|lv") + QString::number(j + 1) + "=Lv." + QString::number(j + 1) + "\n");
+							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("冷却=") + data.skill_group[u].Derive[i].Content[j].Cd + "\n");
+							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("鬼火=") + data.skill_group[u].Derive[i].Content[j].Cost + "\n");
+							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("描述=") + "\n");
+							QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
+							for (int m = 0; m < Q.size() - 1; m++)
+							{
+								Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+							}
+							//去掉行末的空格
+							//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+						}
 					}
-					//去掉行末的空格
-					Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+					else if (kind == 1)
+					{
+						Skill_txt.append(QStringLiteral("|衍") + QString::number(i + 1) + QStringLiteral("说明={{阴阳师手游:被动技能\n"));
+						for (int j = 0; j < data.skill_group[u].Derive[i].Content.size(); j++)
+						{
+							Skill_txt.append("|lv" + QString::number(j + 1) + "=Lv." + QString::number(i + 1) + "\n");
+							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("描述=") + "\n");
+							QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
+							for (int m = 0; m < Q.size() - 1; m++)
+							{
+								Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+							}
+							//去掉行末的空格
+							//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+						}
+					}
+					else if (kind == 2)
+					{
+						Skill_txt.append(QStringLiteral("|衍") + QString::number(i + 1) + QStringLiteral("说明={{阴阳师手游:仅有描述的技能\n"));
+						for (int j = 0; j < data.skill_group[u].Derive[i].Content.size(); j++)
+						{
+							Skill_txt.append("|lv" + QString::number(j + 1) + "=Lv." + QString::number(i + 1) + "\n");
+							Skill_txt.append("|lv" + QString::number(j+ 1) + QStringLiteral("描述=") + "\n");
+							QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
+							for (int m = 0; m < Q.size() - 1; m++)
+							{
+								Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+							}
+							//去掉行末的空格
+							//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+						}
+					}
 				}
 				Skill_txt.append("}}\n");
 			}
 			Skill_txt.append("}}\n");
 		}
-		if (data.skill_group[u].Remark.size() != 0)
-		{
-			Skill_txt.append(QStringLiteral("|技能词条={{阴阳师手游:技能词条说明") + "\n");
-			int id = 0;
-			for (auto a : data.skill_group[u].Remark)
+			if (data.skill_group[u].Remark.size() != 0)
 			{
-				id++;
-				if(std::find(FixItem.begin(), FixItem.end(), a.first)!=FixItem.end())
+				Skill_txt.append(QStringLiteral("|技能词条={{阴阳师手游:技能词条说明") + "\n");
+				int id = 0;
+				for (auto a : data.skill_group[u].Remark)
 				{
-					Skill_txt.append("|Item" + QString::number(id) + "Color=blue\n");
-				}
-				else
-				{
-					Skill_txt.append("|Item" + QString::number(id) + "Color=red\n");
-				}
-				Skill_txt.append("|Item" + QString::number(id) + "Name=" + a.first + "\n");
-				Skill_txt.append("|Item" + QString::number(id) + "Content=\n");
-				if (!a.second.isEmpty())
-				{
-					QStringList Q = a.second.split("\n");//按照|分割字符串
-					for (int m = 0; m < Q.size() - 1; m++)
+					id++;
+					if (std::find(FixItem.begin(), FixItem.end(), a.first) != FixItem.end())
 					{
-						Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+						Skill_txt.append("|Item" + QString::number(id) + "Color=blue\n");
 					}
-					//去掉行末的空格,空格成因应该和QString有关吧
-					Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+					else
+					{
+						Skill_txt.append("|Item" + QString::number(id) + "Color=red\n");
+					}
+					Skill_txt.append("|Item" + QString::number(id) + "Name='''" + a.first + "'''\n");
+					Skill_txt.append("|Item" + QString::number(id) + "Content=\n");
+					if (!a.second.isEmpty())
+					{
+						QStringList Q = a.second.split("\n");//按照|分割字符串
+						for (int m = 0; m < Q.size() ; m++)
+						{
+							Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
+						}
+					//	Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+					}
 				}
+				Skill_txt.append("}}\n");
 			}
 			Skill_txt.append("}}\n");
+			Skill_txt.append("\n");
 		}
-		Skill_txt.append("}}\n");
-		Skill_txt.append("\n");
 	}
-}
-
 void Parser::Form2Txt_Voice()
 {
 	data_Voice data = Data->voice_info;
@@ -725,7 +798,7 @@ void Parser::Form2Txt_Story()
 			Story_txt.append("<p>" + Q.at(m) + "</p>\n");
 		}
 		//去掉行末的空格
-		Story_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
+		//Story_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 	}
 	Story_txt.append("}}\n");
 	Story_txt.append("<!-- Edited by Moegirl Onmyoji Editor -->\n\n");

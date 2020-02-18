@@ -51,6 +51,9 @@ private:
 	int skill_lv_no = -1;
 	int skill_derive_no = -1;
 	int skill_remark_no = -1;
+	int skill_kind = -1;
+
+	int derive_skill_kind = -1;
 
 	int voice_no = -1;
 	int voicegroup_no = -1;

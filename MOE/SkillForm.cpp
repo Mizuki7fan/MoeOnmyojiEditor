@@ -59,9 +59,15 @@ void SkillForm::fill(data_SkillInfo data)
 			if (SS_info.Content[i].KindID == 0)
 				skill_desc->findChild<QRadioButton*>("RbNotPassive")->setChecked(true);
 			if (SS_info.Content[i].KindID == 1)
+			{
 				skill_desc->findChild<QRadioButton*>("RbIsPassive")->setChecked(true);
+				skill_desc->ChangeState(1);
+			}
 			if (SS_info.Content[i].KindID == 2)
+			{
 				skill_desc->findChild<QRadioButton*>("RbOnlyDesc")->setChecked(true);
+				skill_desc->ChangeState(2);
+			}
 			twDesc->addTab(skill_desc, "Lv." + QString::number(i));
 		}
 		QTabWidget* twDerive = SS->findChild<QTabWidget*>("twDerive");
@@ -84,10 +90,17 @@ void SkillForm::fill(data_SkillInfo data)
 				skill_desc->findChild<QTextEdit*>("Desc")->setText(SS_info.Derive[i].Content[j].Desc);
 				if (SS_info.Derive[i].Content[j].KindID == 0)
 					skill_desc->findChild<QRadioButton*>("RbNotPassive")->setChecked(true);
-				if (SS_info.Derive[i].Content[j].KindID == 1)
+				else if (SS_info.Derive[i].Content[j].KindID == 1)
+				{
 					skill_desc->findChild<QRadioButton*>("RbIsPassive")->setChecked(true);
-				if (SS_info.Derive[i].Content[j].KindID == 2)
+					skill_desc->ChangeState(1);
+				}
+				else if (SS_info.Derive[i].Content[j].KindID == 2)
+				{
 					skill_desc->findChild<QRadioButton*>("RbOnlyDesc")->setChecked(true);
+					skill_desc->ChangeState(2);
+				}
+
 				twLevel->addTab(skill_desc, "Lv." + QString::number(j));
 			}
 			twDerive->addTab(derived_skill, SS_info.Derive[i].Name);
