@@ -369,9 +369,15 @@ void BasicInfoForm::doHide(int k)
 	if (k == 1 || k==4)
 	{
 		for (int i = 0; i < 5; i++)
+		{
 			A_Rank[i]->setEnabled(false);
+			A_Rank[i]->setCurrentText("");
+		}
 		for (int i = 5; i < 8; i++)
+		{
 			A_Value[i]->setEnabled(false);
+			A_Value[i]->setText("");
+		}
 		LeAEffect->setEnabled(false);
 		LeAEffectKind->setEnabled(false);
 	}

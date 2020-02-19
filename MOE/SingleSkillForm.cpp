@@ -9,7 +9,7 @@ SingleSkillForm::SingleSkillForm(QWidget* parent)
 {
 	QGridLayout *layout = new QGridLayout();
 	LeIcon = new QLineEdit();
-	LeIcon->setPlaceholderText(QStringLiteral("技能图标，如：归鸟"));
+	LeIcon->setPlaceholderText(QStringLiteral("技能图标，如：[[File:花鸟卷_归鸟.png|60px]]"));
 	LeIcon->setAlignment(Qt::AlignCenter);
 	LeIcon->setObjectName(QStringLiteral("Icon"));
 	layout->addWidget(LeIcon, 0, 0, 1, 2);

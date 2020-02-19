@@ -99,12 +99,11 @@ void MainWindow::Import(void)
     {
         Parser p(fileName);
         data = p.input();
-    }
     basic_info_form->fill(data->basic_info);
     skill_form->fill(data->skill_info);
     voice_form->fill(data->voice_info);
     story_form->fill(data->story_info);
-
+    }
 
 }
 
@@ -113,6 +112,6 @@ void MainWindow::About()
     QMessageBox::about(this, QString("About ") + this->windowTitle(),
         QString("<div><center><h1>") + this->windowTitle() + " v0.1</h1>" +
         "<div>"+QStringLiteral("萌娘百科阴阳师式神资料编辑器 by 葛生明玉")+"</div>"
-        "<div>"+QStringLiteral("欢迎加群 916027306讨论")+"</div>");
+        "<div>"+QStringLiteral("欢迎加群 916027306")+"</div>");
 }
 

@@ -144,7 +144,7 @@ data_SkillInfo SkillForm::getData()
 			SS_info.Content[i].Level = i;
 			SS_info.Content[i].Cd = skill_desc->findChild<QLineEdit*>("Cd")->text();
 			SS_info.Content[i].Cost = skill_desc->findChild<QLineEdit*>("Cost")->text();
-			SS_info.Content[i].Desc = skill_desc->findChild<QTextEdit*>("Desc")->toPlainText();
+			SS_info.Content[i].Desc = skill_desc->findChild<QTextEdit*>("Desc")->toPlainText().trimmed();
 			QRadioButton* NotPassive = skill_desc->findChild<QRadioButton*>("RbNotPassive");
 			QRadioButton* IsPassive = skill_desc->findChild<QRadioButton*>("RbIsPassive");
 			QRadioButton* OnlyDesc = skill_desc->findChild<QRadioButton*>("RbOnlyDesc");
@@ -174,7 +174,7 @@ data_SkillInfo SkillForm::getData()
 				SS_info.Derive[i].Content[j].Level = j;
 				SS_info.Derive[i].Content[j].Cd = skill_desc->findChild<QLineEdit*>("Cd")->text();
 				SS_info.Derive[i].Content[j].Cost = skill_desc->findChild<QLineEdit*>("Cost")->text();
-				SS_info.Derive[i].Content[j].Desc = skill_desc->findChild<QTextEdit*>("Desc")->toPlainText();
+				SS_info.Derive[i].Content[j].Desc = skill_desc->findChild<QTextEdit*>("Desc")->toPlainText().trimmed();
 				QRadioButton* NotPassive = skill_desc->findChild<QRadioButton*>("RbNotPassive");
 				QRadioButton* IsPassive = skill_desc->findChild<QRadioButton*>("RbIsPassive");
 				QRadioButton* OnlyDesc = skill_desc->findChild<QRadioButton*>("RbOnlyDesc");
@@ -195,7 +195,7 @@ data_SkillInfo SkillForm::getData()
 		{
 			SS_info.Remark[i].first = twRemark->tabText(i);
 			QTextEdit* te = twRemark->findChild<QTextEdit*>("Remark" + QString::number(i));
-			SS_info.Remark[i].second = te->toPlainText();
+			SS_info.Remark[i].second = te->toPlainText().trimmed();
 		}
 		result.skill_group.push_back(SS_info);
 	}

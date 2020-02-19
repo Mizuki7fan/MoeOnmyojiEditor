@@ -172,6 +172,7 @@ start:
 			Data->basic_info.Relevant = value;
 		else if (str.indexOf(QStringLiteral("|式神简介")) != -1)
 		{//进入读式神简介的状态
+			Data->basic_info.Intro=value;
 			state.push(3);
 		}
 		else if (str.indexOf(QStringLiteral("|式神立绘")) != -1)
@@ -576,11 +577,17 @@ void Parser::Form2Txt_BasicInfo()
 	BasicInfo_txt.append(QStringLiteral("|1级防御=") + data.NADef + "\n");
 	BasicInfo_txt.append(QStringLiteral("|1级速度=") + data.NASpd + "\n");
 	BasicInfo_txt.append(QStringLiteral("|1级暴击=") + data.NACrt + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒攻击等级=") + data.AAtkRank + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒生命等级=") + data.AHpRank + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒防御等级=") + data.ADefRank + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒速度等级=") + data.ASpdRank + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒暴击等级=") + data.ACrtRank + "\n");
+	if ((data.Rarity != "SP") && (data.Rarity != "N"))
+	{
+		BasicInfo_txt.append(QStringLiteral("|觉醒攻击等级=") + data.AAtkRank + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒生命等级=") + data.AHpRank + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒防御等级=") + data.ADefRank + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒速度等级=") + data.ASpdRank + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒暴击等级=") + data.ACrtRank + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒暴伤=") + data.ACtd + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒命中=") + data.AHr + "\n");
+		BasicInfo_txt.append(QStringLiteral("|觉醒抵抗=") + data.AResist + "\n");
+	}
 	BasicInfo_txt.append(QStringLiteral("|40级攻击=") + data.AAtk + "\n");
 	BasicInfo_txt.append(QStringLiteral("|40级生命=") + data.AHp + "\n");
 	BasicInfo_txt.append(QStringLiteral("|40级防御=") + data.ADef + "\n");
@@ -589,19 +596,17 @@ void Parser::Form2Txt_BasicInfo()
 	BasicInfo_txt.append(QStringLiteral("|未觉醒暴伤=") + data.ACtd + "\n");
 	BasicInfo_txt.append(QStringLiteral("|未觉醒命中=") + data.AHr + "\n");
 	BasicInfo_txt.append(QStringLiteral("|未觉醒抵抗=") + data.AResist + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒暴伤=") + data.ACtd + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒命中=") + data.AHr + "\n");
-	BasicInfo_txt.append(QStringLiteral("|觉醒抵抗=") + data.AResist + "\n");
 	BasicInfo_txt.append(QStringLiteral("|觉醒效果类型=") + data.AEffectKind + "\n");
 	BasicInfo_txt.append(QStringLiteral("|觉醒效果=") + data.AEffect + "\n");
 	BasicInfo_txt.append(QStringLiteral("|别称=") + data.Alias + "\n");
 	BasicInfo_txt.append(QStringLiteral("|相关角色=") + data.Relevant + "\n");
-	BasicInfo_txt.append(QStringLiteral("|式神简介=\n"));
+	BasicInfo_txt.append(QStringLiteral("|式神简介="));
 	QStringList Q = data.Intro.split("\n");
-	for (int i = 0; i < Q.size() ; i++)
+	for (int i = 0; i < Q.size()-1 ; i++)
 	{
-		BasicInfo_txt.append(Q.at(i) + "<br>\n");
+		BasicInfo_txt.append(Q.at(i) + "<br>");
 	}
+	BasicInfo_txt.append("\n");
 	BasicInfo_txt.append(QStringLiteral("|式神立绘={{tabs\n"));
 	for (int i = 0; i < data.SkinName.size(); i++)
 	{
@@ -641,8 +646,6 @@ void Parser::Form2Txt_Skill()
 					{
 						Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
 					}
-					//去掉行末的空格
-					//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 				}
 			}
 			else if (kind == 1)//这是一个被动技能
@@ -653,12 +656,10 @@ void Parser::Form2Txt_Skill()
 					Skill_txt.append("|lv" + QString::number(i + 1) + "=Lv." + QString::number(i + 1) + "\n");
 					Skill_txt.append("|lv" + QString::number(i + 1) + QStringLiteral("描述=") + "\n");
 					QStringList Q = data.skill_group[u].Content[i].Desc.split("\n");//按照|分割字符串
-					for (int m = 0; m < Q.size() - 1; m++)
+					for (int m = 0; m < Q.size() ; m++)
 					{
 						Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
 					}
-					//去掉行末的空格
-					Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 				}//技能描述中不存在仅有描述的情况
 			}
 			Skill_txt.append("}}\n");
@@ -683,12 +684,10 @@ void Parser::Form2Txt_Skill()
 							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("鬼火=") + data.skill_group[u].Derive[i].Content[j].Cost + "\n");
 							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("描述=") + "\n");
 							QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
-							for (int m = 0; m < Q.size() - 1; m++)
+							for (int m = 0; m < Q.size() ; m++)
 							{
 								Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
 							}
-							//去掉行末的空格
-							//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 						}
 					}
 					else if (kind == 1)
@@ -699,12 +698,10 @@ void Parser::Form2Txt_Skill()
 							Skill_txt.append("|lv" + QString::number(j + 1) + "=Lv." + QString::number(i + 1) + "\n");
 							Skill_txt.append("|lv" + QString::number(j + 1) + QStringLiteral("描述=") + "\n");
 							QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
-							for (int m = 0; m < Q.size() - 1; m++)
+							for (int m = 0; m < Q.size() ; m++)
 							{
 								Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
 							}
-							//去掉行末的空格
-							//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 						}
 					}
 					else if (kind == 2)
@@ -715,12 +712,10 @@ void Parser::Form2Txt_Skill()
 							Skill_txt.append("|lv" + QString::number(j + 1) + "=Lv." + QString::number(i + 1) + "\n");
 							Skill_txt.append("|lv" + QString::number(j+ 1) + QStringLiteral("描述=") + "\n");
 							QStringList Q = data.skill_group[u].Derive[i].Content[j].Desc.split("\n");//按照|分割字符串
-							for (int m = 0; m < Q.size() - 1; m++)
+							for (int m = 0; m < Q.size() ; m++)
 							{
 								Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
 							}
-							//去掉行末的空格
-							//Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 						}
 					}
 				}
@@ -752,7 +747,6 @@ void Parser::Form2Txt_Skill()
 						{
 							Skill_txt.append("<p>" + Q.at(m) + "</p>\n");
 						}
-					//	Skill_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 					}
 				}
 				Skill_txt.append("}}\n");
@@ -778,6 +772,7 @@ void Parser::Form2Txt_Voice()
 		}
 		Voice_txt.append("}}\n");
 	}
+	Voice_txt.append("\n");
 }
 
 void Parser::Form2Txt_Story()
@@ -793,14 +788,13 @@ void Parser::Form2Txt_Story()
 		Story_txt.append(QStringLiteral("|播") + QString::number(u + 1) + "=" + data.Group[u].PlayButton + "\n");
 		Story_txt.append(QStringLiteral("|值") + QString::number(u + 1) + "=\n");
 		QStringList Q = data.Group[u].Content.split("\n");//按照|分割字符串
-		for (int m = 0; m < Q.size() - 1; m++)
+		for (int m = 0; m < Q.size() ; m++)
 		{
 			Story_txt.append("<p>" + Q.at(m) + "</p>\n");
 		}
-		//去掉行末的空格
-		//Story_txt.append("<p>" + Q.at(Q.size() - 1).left(Q.at(Q.size() - 1).length() - 1) + "</p>\n");
 	}
 	Story_txt.append("}}\n");
+	Story_txt.append(QStringLiteral("{ {阴阳师手游}}")+"}}\n");
 	Story_txt.append("<!-- Edited by Moegirl Onmyoji Editor -->\n\n");
 }
 
@@ -874,8 +868,8 @@ void Parser::Txt2Form_Voice()
 		matchVoice(str);
 		if (state.top() == -1)
 			break;
-	}
-	line_number[3] = line_id;
+	}	
+	line_number[3] = line_id-1;
 	line_id = 0;
 }
 

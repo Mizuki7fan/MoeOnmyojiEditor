@@ -19,7 +19,7 @@ SkinForm::SkinForm(QWidget* parent)
 	layout->addWidget(LSkin);
 
 	LeSkin = new QLineEdit();
-	LeSkin->setPlaceholderText(QStringLiteral("如：花鸟卷_闲池荷香"));
+	LeSkin->setPlaceholderText(QStringLiteral("如：[[File:花鸟卷_闲池荷香.png|400px]]"));
 	LeSkin->setAlignment(Qt::AlignCenter);
 	LeSkin->setObjectName("LeSkin");//设置该物件的objectName，用于findchild的查找以获取其值
 	layout->addWidget(LeSkin);

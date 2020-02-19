@@ -89,7 +89,7 @@ data_Story StoryForm::getData()
 		result.Group[i].Condition= table->findChild<QLineEdit*>("LeCondition" + QString::number(i))->text();
 		result.Group[i].Award= table->findChild<QLineEdit*>("LeAward" + QString::number(i))->text();
 		result.Group[i].PlayButton= table->findChild<QLineEdit*>("LePlay" + QString::number(i))->text();
-		result.Group[i].Content= table->findChild<QTextEdit*>("TeContent" + QString::number(i))->toPlainText();
+		result.Group[i].Content= table->findChild<QTextEdit*>("TeContent" + QString::number(i))->toPlainText().trimmed();
 	}
 	return result;
 }
