@@ -230,6 +230,11 @@ void SkillForm::addSkill()
 	if (!isOK)
 		return;
 	SingleSkillForm* tmp = new SingleSkillForm();
+	QWidget* q = this->parentWidget()->findChild<QWidget*>("BasicInfoForm");
+	QString Name = q->findChild<QLineEdit*>("LeName")->text();
+
+	tmp->findChild<QLineEdit*>("Icon")->setText("[[File:"+Name+"_"+text+".png|60px]]");
+	tmp->findChild<QLineEdit*>("Name")->setText(text);
 	//设置控件的名字以备查找
 	QString name = "Skill" + QString::number(twSkill->count());
 	tmp->setObjectName(name);

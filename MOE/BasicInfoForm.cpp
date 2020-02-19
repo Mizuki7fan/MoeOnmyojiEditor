@@ -19,6 +19,7 @@ BasicInfoForm::BasicInfoForm(QWidget* parent)
 	LeName->setPlaceholderText(QStringLiteral("中文名，如：花鸟卷"));
 	LeName->setAlignment(Qt::AlignCenter);
 	LeName->setFont(fontBold);
+	LeName->setObjectName("LeName");
 	// 参数：起始的行、列号，行数，列数
 	layout->addWidget(LeName, 0, 0, 1, 6);
 	LeNameHiragara = new QLineEdit();
@@ -82,6 +83,7 @@ BasicInfoForm::BasicInfoForm(QWidget* parent)
 
 	LeGetway = new QLineEdit();
 	LeGetway->setPlaceholderText(QStringLiteral("如：抽卡"));
+	LeGetway->setText(QStringLiteral("召唤、百鬼夜行"));
 	LeGetway->setAlignment(Qt::AlignCenter);
 	layout->addWidget(LeGetway, 4, 6, 1, 2);
 
@@ -123,17 +125,26 @@ BasicInfoForm::BasicInfoForm(QWidget* parent)
 	for (int i = 0; i < 5; i++)
 	{
 		N_A_Rank[i] = new QComboBox();
+		A_Rank[i] = new QComboBox();
+		N_A_Value[i] = new QLineEdit();
+		A_Value[i] = new QLineEdit();
 		N_A_Rank[i]->addItems(RankList);
 		layout->addWidget(N_A_Rank[i], 4, i + 1, 1, 1);
-		A_Rank[i] = new QComboBox();
 		A_Rank[i]->addItems(RankList);
 		layout->addWidget(A_Rank[i], 6, i + 1, 1, 1);
-		N_A_Value[i] = new QLineEdit();
 		N_A_Value[i]->setAlignment(Qt::AlignCenter);
 		layout->addWidget(N_A_Value[i], 5, i + 1, 1, 1);
-		A_Value[i] = new QLineEdit();
 		A_Value[i]->setAlignment(Qt::AlignCenter);
 		layout->addWidget(A_Value[i], 7, i + 1, 1, 1);
+	}
+	connect(N_A_Rank[4], SIGNAL(currentIndexChanged(int)), this, SLOT(doSetNCrt(int)));
+	connect(A_Rank[4], SIGNAL(currentIndexChanged(int)), this, SLOT(doSetCrt(int)));
+	N_A_Rank[4]->setCurrentIndex(1);
+	A_Rank[4]->setCurrentIndex(1);
+	for (int i = 0; i < 4; i++)
+	{
+		N_A_Rank[i]->setCurrentIndex(1);
+		A_Rank[i]->setCurrentIndex(1);
 	}
 	QLabel* LCdt = new QLabel(QStringLiteral("暴击伤害"));
 	LCdt->setAlignment(Qt::AlignCenter);
@@ -169,6 +180,14 @@ BasicInfoForm::BasicInfoForm(QWidget* parent)
 		A_Value[i]->setAlignment(Qt::AlignCenter);
 		layout->addWidget(A_Value[i], 10, i - 4, 1, 1);
 	}
+	N_A_Value[5]->setText("150%");
+	A_Value[5]->setText("150%");
+	N_A_Value[6]->setText("0%");
+	A_Value[6]->setText("0%");
+	N_A_Value[7]->setText("0%");
+	A_Value[7]->setText("0%");
+
+
 	QLabel* LAEffect = new QLabel(QStringLiteral("觉醒效果"));
 	LAEffect->setAlignment(Qt::AlignCenter);
 	LAEffect->setFont(fontBold);
@@ -229,21 +248,82 @@ BasicInfoForm::~BasicInfoForm()
 
 }
 
+void BasicInfoForm::doSetNCrt(int i)
+{
+	switch (i)
+	{
+	case 0: 
+		N_A_Value[4]->setText("20%");
+		break;
+	case 1:
+		N_A_Value[4]->setText("10%");
+		break;
+	case 2:
+		N_A_Value[4]->setText("8%");
+		break;
+	case 3:
+		N_A_Value[4]->setText("5%");
+		break;
+	case 4:
+		N_A_Value[4]->setText("3%");
+		break;
+	case 5:
+		N_A_Value[4]->setText("0%");
+		break;
+	default:
+		break;
+	}
+}
+
+void BasicInfoForm::doSetCrt(int i)
+{
+	switch (i)
+	{
+	case 0:
+		A_Value[4]->setText("20%");
+		break;
+	case 1:
+		A_Value[4]->setText("10%");
+		break;
+	case 2:
+		A_Value[4]->setText("8%");
+		break;
+	case 3:
+		A_Value[4]->setText("5%");
+		break;
+	case 4:
+		A_Value[4]->setText("3%");
+		break;
+	case 5:
+		A_Value[4]->setText("0%");
+		break;
+	default:
+		break;
+	}
+}
+
 void BasicInfoForm::addSkin()
 {
+	bool isOK;
+	QString text = QInputDialog::getText(NULL, "",
+		QStringLiteral("请输入皮肤的名字"),
+		QLineEdit::Normal,
+		QStringLiteral("默认"),
+		&isOK);
+	if (!isOK)
+		return;
 	SkinForm* tmp = new SkinForm();
-	sfSkin.push_back(tmp);
-	twSkin->addTab(tmp, QString::number(sfSkin.size()));
+	tmp->findChild<QLineEdit*>("LeName")->setText(text);
+	tmp->findChild<QLineEdit*>("LeSkin")->setText("[[File:"+LeName->text()+"_"+text+".png|400px]]");
+	twSkin->addTab(tmp, text);
 }
 
 void BasicInfoForm::delSkin()
 {
-	if (sfSkin.size() == 0)
+	if (twSkin->count()==0)
 		return;
 	else
 	{
-		sfSkin.pop_back();
-		//删除立绘tab
 		int c = twSkin->count();
 		QWidget* p = twSkin->widget(c - 1);
 		if (0 != p)

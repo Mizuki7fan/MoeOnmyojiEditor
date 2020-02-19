@@ -43,3 +43,10 @@ QString SkinForm::getSkin()
 {
 	return LeSkin->text();
 }
+
+void SkinForm::SetName(QString str, QString str2)
+{
+	SkikigamiName = str;
+	SkinName = str2;
+
+}

@@ -30,6 +30,4 @@ private:
 	QTabWidget *twSkill;
 	
 	std::vector<SingleSkillForm*> sfSkillForm;
-
-
 };

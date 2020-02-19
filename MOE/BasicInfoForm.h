@@ -19,6 +19,8 @@ public:
 	//如果稀有度是SP则将一些内容进行隐藏
 public slots:
 	void doHide(int);
+	void doSetNCrt(int);
+	void doSetCrt(int);
 	void addSkin();
 	void delSkin();
 

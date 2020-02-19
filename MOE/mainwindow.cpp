@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget* parent)
     m_pStackedWidget = new QStackedWidget();
 
     basic_info_form = new BasicInfoForm();
+    basic_info_form->setObjectName("BasicInfoForm");
     skill_form = new SkillForm();
     voice_form = new VoiceForm();
     story_form = new StoryForm();

@@ -14,8 +14,12 @@ public:
 	QString getLeName();
 	QString getSkin();
 
+	void SetName(QString,QString);
+
 private:
 	QLineEdit* LeName;
 	QLineEdit* LeSkin;
+
+	QString SkikigamiName, SkinName;
 };
 

@@ -602,8 +602,10 @@ void Parser::Form2Txt_BasicInfo()
 	BasicInfo_txt.append(QStringLiteral("|相关角色=") + data.Relevant + "\n");
 	BasicInfo_txt.append(QStringLiteral("|式神简介="));
 	QStringList Q = data.Intro.split("\n");
-	for (int i = 0; i < Q.size()-1 ; i++)
+	for (int i = 0; i < Q.size(); i++)
 	{
+		if (Q.at(i).isEmpty())
+			continue;
 		BasicInfo_txt.append(Q.at(i) + "<br>");
 	}
 	BasicInfo_txt.append("\n");
@@ -794,7 +796,7 @@ void Parser::Form2Txt_Story()
 		}
 	}
 	Story_txt.append("}}\n");
-	Story_txt.append(QStringLiteral("{ {阴阳师手游}}")+"}}\n");
+	Story_txt.append(QStringLiteral("{{{阴阳师手游}}")+"}}\n");
 	Story_txt.append("<!-- Edited by Moegirl Onmyoji Editor -->\n\n");
 }
 
