@@ -3,9 +3,8 @@
 #include "SkillForm.h"
 #include "VoiceForm.h"
 #include "StoryForm.h"
-#include <QLabel>
 #include "DataForm.h"
-
+#include <QTimer>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget* parent)
@@ -22,7 +21,10 @@ MainWindow::MainWindow(QWidget* parent)
     btnStory = new QPushButton(QStringLiteral("传记"));
     btnImport = new QPushButton(QStringLiteral("导入"));
     btnExport = new QPushButton(QStringLiteral("导出"));
+    btnDownload = new QPushButton(QStringLiteral("下载"));
+    btnUpload = new QPushButton(QStringLiteral("上传"));
     btnAbout = new QPushButton("About");
+    lHint = new QLabel("information");
     QLabel* blank = new QLabel("   ", this);
 
     m_pStackedWidget = new QStackedWidget();
@@ -48,9 +50,13 @@ MainWindow::MainWindow(QWidget* parent)
     pLayout->addWidget(btnStory, 0, 6);
     pLayout->addWidget(m_pStackedWidget, 1, 0, 2, 7);
     //addWidget(待添加QWidget，行数，列数，跨越行数，跨越列数);后面的参数可以缺省
-    pLayout->addWidget(btnImport, 3, 4);
-    pLayout->addWidget(btnExport, 3, 6);
+
     pLayout->addWidget(btnAbout, 3, 0);
+    pLayout->addWidget(btnDownload, 3, 1);
+    pLayout->addWidget(btnUpload, 3, 2);
+    pLayout->addWidget(btnImport, 3, 3);
+    pLayout->addWidget(btnExport, 3, 4);
+    pLayout->addWidget(lHint, 3, 5, 1, 2);
 
     pwind->setLayout(pLayout);
     //通过匿名函数切换StackedWidget
@@ -61,6 +67,11 @@ MainWindow::MainWindow(QWidget* parent)
     connect(btnExport, SIGNAL(clicked()), SLOT(Export()));
     connect(btnImport, SIGNAL(clicked()), SLOT(Import()));
     connect(btnAbout, SIGNAL(clicked()), SLOT(About()));
+
+    QTimer* timer = new QTimer(this);
+   // connect(timer, SIGNAL(timeout()), this, SLOT(***)); // ***就是你所说的响应函数
+    connect(timer, &QTimer::timeout, this, [=]() {std::cout << 13 << std::endl; });
+    timer->start(1000); // 每隔1s
 }
 
 MainWindow::~MainWindow()

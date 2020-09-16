@@ -5,13 +5,13 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QLabel>
 #include "Parser.h"
 
 class BasicInfoForm;
 class SkillForm;
 class VoiceForm;
 class StoryForm;
-
 class DataForm;
 
 
@@ -37,7 +37,10 @@ private:
     QPushButton* btnStory;//传记
     QPushButton* btnExport;//导出
     QPushButton* btnImport;//导入
+    QPushButton* btnDownload;//下载
+    QPushButton* btnUpload;//上传
     QPushButton* btnAbout;
+    QLabel* lHint;
     //设置三个QStackedWidget 页面，每个页面包含一个按钮（当然这里面的按钮只是看看）；
     
     QStackedWidget* m_pStackedWidget;

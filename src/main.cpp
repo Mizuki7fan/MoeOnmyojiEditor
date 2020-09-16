@@ -8,6 +8,5 @@ int main(int argc, char *argv[])
 	a.setFont(f);
 	MainWindow w;
 	w.showNormal();
-	//w.showMaximized();
 	return a.exec();
 }

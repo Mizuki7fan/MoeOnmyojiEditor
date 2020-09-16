@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/txt">
+        <file>Information/FixedItem.txt</file>
+        <file>Information/LoginInfo.txt</file>
+    </qresource>
+</RCC>

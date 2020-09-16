@@ -74,7 +74,7 @@ void RemarkDialog::setComm()
 
 void RemarkDialog::loadFixedItem()
 {
-	QFile file("FixedItem.txt");
+	QFile file(":/txt/Information/FixedItem.txt");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 	QTextStream in(&file);
