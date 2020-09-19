@@ -15,6 +15,7 @@ VoiceGroup::VoiceGroup(QWidget* parent)
 	std::vector<QWidget*> row2;
 	row2.resize(30);
 	//预设大小
+	Isincluded.resize(30);
 	Action.resize(30);
 	ContentCN.resize(30);
 	ContentJP.resize(30);
@@ -25,8 +26,20 @@ VoiceGroup::VoiceGroup(QWidget* parent)
 	row2l->setColumnStretch(0, 1);
 	row2l->setColumnStretch(1, 6);
 	row2l->setColumnStretch(2, 1);
+	Isincluded[i] = new QCheckBox();
+	Isincluded[i]->setVisible(false);
+	Isincluded[i]->setText(QStringLiteral("未实装"));
+	Isincluded[i]->setChecked(false);
+	Isincluded[i]->setObjectName("Isincluded" + QString::number(i));
+	//connect(Isincluded[i], SIGNAL(stateChanged(int)), this, SLOT(SetActionUneditable(int)));
+	connect(Isincluded[i], &QCheckBox::stateChanged, this, [=]() {
+		if (Isincluded[i]->isChecked())
+			Action[i]->setEnabled(false);
+		else
+			Action[i]->setEnabled(true);
+		});
 	Action[i] = new QTextEdit();
-	Action[i]->setAlignment(Qt::AlignCenter);
+	Action[i]->setAlignment(Qt::AlignLeft);
 	Action[i]->setVisible(false);
 	Action[i]->setPlaceholderText(QStringLiteral("动作名称"));
 	Action[i]->setObjectName("Action" + QString::number(i));
@@ -43,7 +56,8 @@ VoiceGroup::VoiceGroup(QWidget* parent)
 	PlayButton[i]->setAlignment(Qt::AlignCenter);
 	PlayButton[i]->setPlaceholderText(QStringLiteral("播放文件"));
 	PlayButton[i]->setObjectName("PlayButton" + QString::number(i));
-	row2l->addWidget(Action[i], 0, 0, 2, 1);
+	row2l->addWidget(Isincluded[i], 0, 0, 1, 1);
+	row2l->addWidget(Action[i],1, 0,1, 1);
 	row2l->addWidget(ContentJP[i],0,1,1,1);
 	row2l->addWidget(ContentCN[i],1,1, 1, 1);
 	row2l->addWidget(PlayButton[i],0,2, 2, 1);
@@ -95,6 +109,7 @@ void VoiceGroup::AddOne()
 {
 	if (cnt == 30)
 		return;
+	Isincluded[cnt]->setVisible(true);
 	Action[cnt]->setVisible(true);
 	ContentCN[cnt]->setVisible(true);
 	ContentJP[cnt]->setVisible(true);

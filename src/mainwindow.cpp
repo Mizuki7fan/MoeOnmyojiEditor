@@ -69,9 +69,25 @@ MainWindow::MainWindow(QWidget* parent)
     connect(btnAbout, SIGNAL(clicked()), SLOT(About()));
 
     QTimer* timer = new QTimer(this);
-   // connect(timer, SIGNAL(timeout()), this, SLOT(***)); // ***就是你所说的响应函数
-    connect(timer, &QTimer::timeout, this, [=]() {std::cout << 13 << std::endl; });
-    timer->start(1000); // 每隔1s
+    connect(timer, &QTimer::timeout, this, [=]() {
+     data_form = new DataForm();
+     data_form->basic_info = basic_info_form->getData();
+     data_form->skill_info = skill_form->getData();
+     data_form->voice_info = voice_form->getData();
+     data_form->story_info = story_form->getData();
+     Parser p(data_form);
+     p.savecache();
+     QDateTime current_date_time = QDateTime::currentDateTime();
+     QString current_date = current_date_time.toString("hh:mm:ss");
+     QString info = QStringLiteral("于") + current_date + QStringLiteral("自动保存最新版本");
+     lHint->setText(info);
+        });
+    timer->start(300*1000); // 每隔1s
+
+
+
+
+
 }
 
 MainWindow::~MainWindow()

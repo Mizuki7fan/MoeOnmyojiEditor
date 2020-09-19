@@ -1,0 +1,78 @@
+== 语音 ==
+{{阴阳师手游:语音
+|动作名1=召唤动画
+|日1=我が名は鈴鹿御前、鈴鹿山の主だ<br/>
+Wagana wa Suzuka Gozen, suzukayama no aruji da
+|中1=吾乃铃鹿御前，铃鹿山之主
+|播1=
+|动作名2=式神录-触摸头部
+|日2=我らの故郷を、必ず取り戻す<br/>
+Warera no kokyou wo, kanarazu torimodosu
+|中2=远方的故土，终有一日会夺回(官译)
+|播2=
+|动作名3=式神录-触摸身体
+|日3=私がいる限り、何の心配もいらない<br/>
+Watashi ga iru kagiri, nan no shinpai mo iranai
+|中3=只要有我在，就没什么好担心的
+|播3=
+|动作名4=式神录-触摸身体
+|日4=あなたも帰る場所がないのか
+|中4=你与我一样，是无家可归之人吗(官译)
+|播4=
+|动作名5=式神录-触摸身体&手臂
+|日5=まったく、しょうがないな<br/>
+Mattaku, shou ga nai na
+|中5=真是，拿你没办法啊(官译)
+|播5=
+|动作名6=式神录-触摸腿部
+|日6=少し疲れただろう？こっちにおいで<br/>
+Sukoshi tsukareta darou, kocchi ni oide
+|中6=有些累了吧？快来我这儿(官译)
+|播6=
+|动作名7=出场
+|日7=鈴鹿山を騒がせた者、名を名乘れ！<br/>
+Suzukayama wo sawagaseta mono, na wo nanore
+|中7=来铃鹿山挑事的，是哪个家伙！(官译)
+|播7=
+|动作名8=出场
+|日8=私の意志、すなわち海の意志だ<br/>
+Watashi no ishi, sunawachi umi no ishi da
+|中8=我的意志，即大海的意志(官译)
+|播8=
+|动作名9=普攻
+|日9=隙きあり！<br/>
+Suki ari
+|中9=有破绽！
+|播9=
+|动作名10=技能-麓魂·极
+|日10=このままでは終わらせない<br/>
+Kono mama dewa owarasenai
+|中10=我们不会就此终结！
+|播10=
+|动作名11=技能-麓魂·极
+|日11=海の烽火は消えぬ！<br/>
+Umi no houka wa kienu
+|中11=海上的烽火不会熄灭！
+|播11=
+|动作名12=技能-万羽浪行
+|日12=心を貫く痛み、味わえ！<br/>
+Kokoro wo tsuranuku itami, ajiwae
+|中12=体会这穿心之痛吧！
+|播12=
+|动作名13=技能-万羽浪行
+|日13=刃は影を追う、陰界の弓は日を破る<br/>
+Yaiba wa kage wo oou, inkai no yumi wa hi wo yaburu
+|中13=刀可逐影，冥弓射日
+|播13=
+|动作名14=阵亡
+|日14=大嶽丸に会うまで、倒れるわけには……！<br/>
+Ootakemaru ni au made, taoreru wake niwa
+|中14=在见到大岳丸之前，我怎么能倒下……！
+|播14=
+|动作名15={{color|gray|未实装}}
+|日15={{color|gray|私の後ろに下がって、嵐は必ず過ぎ去る}}<br/>
+{{color|gray|Watashi no ushiro ni sagatte, arashi wa kanarazu sugisaru}}
+|中15={{color|gray|站我身后，风浪会过去的(官译)}}
+|播15=
+}}
+来源<ref>来源https://bbs.nga.cn/read.php?tid=10070310&rand=311</ref>

@@ -34,6 +34,12 @@ void VoiceForm::fill(data_Voice data)
 		vg->setCount(data.Group[u].Text.size());
 		for (int i = 0; i < data.Group[u].Text.size();i++)
 		{
+			QCheckBox* IsIncluded = vg->findChild<QCheckBox*>("Isincluded" + QString::number(i));
+			if (data.Group[u].Text[i].IsIncluded)
+				IsIncluded->setChecked(false);
+			else
+				IsIncluded->setChecked(true);
+
 			QTextEdit* Action = vg->findChild<QTextEdit*>("Action" + QString::number(i));
 			Action->setText(data.Group[u].Text[i].Action);
 			Action->setVisible(true);
@@ -68,6 +74,10 @@ data_Voice VoiceForm::getData()
 		result.Group[i].Text.resize(cnt);
 		for (int j = 0; j < cnt; j++)
 		{
+			if (vg->findChild<QCheckBox*>("Isincluded" + QString::number(j))->isChecked())
+				result.Group[i].Text[j].IsIncluded = false;
+			else
+				result.Group[i].Text[j].IsIncluded = true;
 			result.Group[i].Text[j].Action = vg->findChild<QTextEdit*>("Action" + QString::number(j))->toPlainText();
 			result.Group[i].Text[j].TextCN= vg->findChild<QTextEdit*>("ContentCN" + QString::number(j))->toPlainText();
 			result.Group[i].Text[j].TextJP= vg->findChild<QTextEdit*>("ContentJP" + QString::number(j))->toPlainText();

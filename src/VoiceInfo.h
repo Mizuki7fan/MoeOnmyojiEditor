@@ -4,6 +4,7 @@
 
 struct data_SingleVoice
 {
+	bool IsIncluded;
 	QString Action;
 	QString TextJP, TextCN;
 	QString PlayButton;

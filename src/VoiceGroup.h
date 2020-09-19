@@ -3,6 +3,7 @@
 #include <QtGui>
 #include <QtWidgets>
 #include <vector>
+#include <qcheckbox.h>
 //添加一个语音组
 class VoiceGroup :public QWidget
 {
@@ -19,11 +20,11 @@ public slots:
 	void AddOne();
 	void DelOne();
 
-
 private:
 	QScrollArea* saWnd;
 	QWidget* wWnd;
 	QPushButton* pbAdd, * pbDel;
+	std::vector<QCheckBox*> Isincluded;
 	std::vector<QTextEdit*> Action;
 	std::vector<QTextEdit*> ContentCN;
 	std::vector<QTextEdit*> ContentJP;

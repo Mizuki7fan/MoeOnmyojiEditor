@@ -26,7 +26,7 @@ Parser::~Parser()
 
 void Parser::LoadFixItem()
 {
-	QFile file("FixedItem.txt");
+	QFile file(":/txt/Information/FixedItem.txt");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 	QTextStream in(&file);
@@ -45,8 +45,10 @@ void Parser::output(QString of)
 {
 	QFile f(of);
 	if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+	//if (!f.open(QIODevice::ReadWrite | QIODevice::Text))
 	{
 		std::cout << "OpenFailed" << std::endl;
+		return;
 	}
 	QTextStream out(&f);
 
@@ -55,6 +57,30 @@ void Parser::output(QString of)
 	out << Voice_txt;
 	out << Story_txt;
 	f.close();
+	std::cout << "保存成功" << std::endl;
+	return;
+}
+
+void Parser::savecache()
+{
+	//https://stackoverflow.com/questions/54008930/c-write-to-resource-file-with-qfile-qiodevicewrite-qfile-x-device-not
+	//嵌入src的文件只能读不能写,很蠢
+	//QFile f(":/txt/Information/Cache.txt");
+	QFile f("D:/repository/MoeOnmyojiEditor/src/LocalVersion/Cache.txt");
+	if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+	//if (!f.open(QIODevice::ReadOnly))
+	{
+		std::cout << "failed" << std::endl;
+		return;
+	}
+	QTextStream out(&f);
+
+	out << BasicInfo_txt;
+	out << Skill_txt;
+	out << Voice_txt;
+	out << Story_txt;
+	f.close();
+	std::cout << "保存缓存成功" << std::endl;
 	return;
 }
 
@@ -471,17 +497,42 @@ void Parser::matchVoice(QString str)
 		if (str.indexOf(QStringLiteral("|动作名")) != -1)
 		{
 			data_SingleVoice tmp;
-			tmp.Action = value;
+			if (str.endsWith("}}"))
+			{
+				tmp.IsIncluded = false;
+				tmp.Action = QStringLiteral("未收录");
+			}
+			else
+			{
+				tmp.IsIncluded = true;
+				tmp.Action = value;
+			}
 			Data->voice_info.Group[voice_no].Text.push_back(tmp);
 			voicegroup_no++;
 		}
 		else if (str.indexOf(QStringLiteral("|日")) != -1)
 		{
+			if (Data->voice_info.Group[voice_no].Text[voicegroup_no].IsIncluded == true)
 			Data->voice_info.Group[voice_no].Text[voicegroup_no].TextJP = value;
+			else
+			{
+				int st = value.indexOf("{");
+				int et = value.indexOf("}");
+				value=value.mid(st+13, et - st-13);
+				Data->voice_info.Group[voice_no].Text[voicegroup_no].TextJP = value;
+			}
 		}
 		else if (str.indexOf(QStringLiteral("|中")) != -1)
 		{
-			Data->voice_info.Group[voice_no].Text[voicegroup_no].TextCN = value;
+			if (Data->voice_info.Group[voice_no].Text[voicegroup_no].IsIncluded == true)
+				Data->voice_info.Group[voice_no].Text[voicegroup_no].TextCN = value;
+			else
+			{
+				int st = value.indexOf("{");
+				int et = value.indexOf("}");
+				value = value.mid(st + 13, et - st - 13);
+				Data->voice_info.Group[voice_no].Text[voicegroup_no].TextCN = value;
+			}
 		}
 		else if (str.indexOf(QStringLiteral("|播")) != -1)
 		{
@@ -767,10 +818,20 @@ void Parser::Form2Txt_Voice()
 		Voice_txt.append(QStringLiteral("{{阴阳师手游:语音\n"));
 		for (int i = 0; i < data.Group[u].Text.size(); i++)
 		{
-			Voice_txt.append(QStringLiteral("|动作名") + QString::number(i + 1) + "=" + data.Group[u].Text[i].Action+"\n");
-			Voice_txt.append(QStringLiteral("|日") + QString::number(i + 1) + "=" + data.Group[u].Text[i].TextJP+"\n");
-			Voice_txt.append(QStringLiteral("|中") + QString::number(i + 1) + "=" + data.Group[u].Text[i].TextCN+"\n");
-			Voice_txt.append(QStringLiteral("|播") + QString::number(i + 1) + "=" + data.Group[u].Text[i].PlayButton+"\n");
+			if (data.Group[u].Text[i].IsIncluded)//该条语音已经实装
+			{
+				Voice_txt.append(QStringLiteral("|动作名") + QString::number(i + 1) + "=" + data.Group[u].Text[i].Action + "\n");
+				Voice_txt.append(QStringLiteral("|日") + QString::number(i + 1) + "=" + data.Group[u].Text[i].TextJP + "\n");
+				Voice_txt.append(QStringLiteral("|中") + QString::number(i + 1) + "=" + data.Group[u].Text[i].TextCN + "\n");
+				Voice_txt.append(QStringLiteral("|播") + QString::number(i + 1) + "=" + data.Group[u].Text[i].PlayButton + "\n");
+			}
+			else//该条语音尚未实装
+			{
+				Voice_txt.append(QStringLiteral("|动作名") + QString::number(i + 1) + "={{color|gray|未实装}}\n");
+				Voice_txt.append(QStringLiteral("|日") + QString::number(i + 1) + "={{color|gray|" + data.Group[u].Text[i].TextJP + "}}\n");
+				Voice_txt.append(QStringLiteral("|中") + QString::number(i + 1) + "={{color|gray|" + data.Group[u].Text[i].TextCN + "}}\n");
+				Voice_txt.append(QStringLiteral("|播") + QString::number(i + 1) + "=" + data.Group[u].Text[i].PlayButton + "\n");
+			}
 		}
 		Voice_txt.append("}}\n");
 	}

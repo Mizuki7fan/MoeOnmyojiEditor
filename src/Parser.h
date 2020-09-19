@@ -15,6 +15,8 @@ public:
 
 	void LoadFixItem();
 	void output(QString of);
+	void savecache();
+	void loadcache();
 	DataForm* input();
 
 	void matchBasicInfo(QString);
