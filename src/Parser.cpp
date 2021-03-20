@@ -66,9 +66,11 @@ void Parser::savecache()
 	//https://stackoverflow.com/questions/54008930/c-write-to-resource-file-with-qfile-qiodevicewrite-qfile-x-device-not
 	//嵌入src的文件只能读不能写,很蠢
 	//QFile f(":/txt/Information/Cache.txt");
-	QFile f("D:/repository/MoeOnmyojiEditor/src/LocalVersion/Cache.txt");
+	//QFile f("D:/repository/MoeOnmyojiEditor/src/LocalVersion/Cache.txt");
+	QString path = QDir::currentPath().append(QStringLiteral("/EditCache.txt"));
+	std::cout << path.toStdString();
+	QFile f(path);
 	if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-	//if (!f.open(QIODevice::ReadOnly))
 	{
 		std::cout << "failed" << std::endl;
 		return;
