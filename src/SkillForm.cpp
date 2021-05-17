@@ -21,8 +21,6 @@ SkillForm::SkillForm(QWidget* parent)
 	twSkill = new QTabWidget();
 	layout->addWidget(twSkill, 1, 0, 1, 2);
 
-
-
 	this->setLayout(layout);
 }
 

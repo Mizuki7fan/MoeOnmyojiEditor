@@ -10,6 +10,7 @@ class SkillDesc :public QWidget
 public:
 	SkillDesc(QWidget* _parent = 0);
 	~SkillDesc();
+	//void CopyInfo(const SkillDesc& copy);
 public slots:
 	void ChangeState(int i);
 

@@ -68,7 +68,15 @@ SingleSkillForm::~SingleSkillForm()
 
 void SingleSkillForm::AddLevel()
 {
-	SkillDesc* tmp = new SkillDesc();
+	SkillDesc* tmp= new SkillDesc();
+//	if (sdDesc.size() != 0)
+//	{
+//
+////		SS->findChild<SkillDesc*>("Desc" + QString::number(i));
+//
+//	}
+//		tmp->CopyInfo(sdDesc[sdDesc.size()-1]);
+
 	sdDesc.push_back(tmp);
 	tmp->setObjectName("Desc" + QString::number(twDesc->count()));
 	twDesc->addTab(tmp, QStringLiteral("Lv.") + QString::number(sdDesc.size()));

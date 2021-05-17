@@ -67,6 +67,16 @@ SkillDesc::~SkillDesc()
 
 }
 
+//void SkillDesc::CopyInfo(const SkillDesc& copy)
+//{
+////	QString s = copy.findChild<QLineEdit*>("Desc")->text()
+//	LeCd->setText(copy.LeCd->text());
+//	LeCost->setText(copy.LeCost->text());
+//	RbNotPassive->setChecked(copy.RbNotPassive->isChecked());
+//	RbIsPassive->setChecked(copy.RbIsPassive->isChecked());
+//	TeDesc->setText(copy.TeDesc->toPlainText());
+//}
+
 void SkillDesc::ChangeState(int i)
 {
 	if (i == 0)
